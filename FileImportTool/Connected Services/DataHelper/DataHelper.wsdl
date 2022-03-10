@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetTable">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CommandText" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DataBaseName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sqlParms" type="tns:ArrayOfParameter" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfParameter">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Parameter" nillable="true" type="tns:Parameter" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Parameter">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ParamName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParamType" type="tns:SqlDbType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ParamValue" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="SqlDbType">
+        <s:restriction base="s:string">
+          <s:enumeration value="BigInt" />
+          <s:enumeration value="Binary" />
+          <s:enumeration value="Bit" />
+          <s:enumeration value="Char" />
+          <s:enumeration value="DateTime" />
+          <s:enumeration value="Decimal" />
+          <s:enumeration value="Float" />
+          <s:enumeration value="Image" />
+          <s:enumeration value="Int" />
+          <s:enumeration value="Money" />
+          <s:enumeration value="NChar" />
+          <s:enumeration value="NText" />
+          <s:enumeration value="NVarChar" />
+          <s:enumeration value="Real" />
+          <s:enumeration value="UniqueIdentifier" />
+          <s:enumeration value="SmallDateTime" />
+          <s:enumeration value="SmallInt" />
+          <s:enumeration value="SmallMoney" />
+          <s:enumeration value="Text" />
+          <s:enumeration value="Timestamp" />
+          <s:enumeration value="TinyInt" />
+          <s:enumeration value="VarBinary" />
+          <s:enumeration value="VarChar" />
+          <s:enumeration value="Variant" />
+          <s:enumeration value="Xml" />
+          <s:enumeration value="Udt" />
+          <s:enumeration value="Structured" />
+          <s:enumeration value="Date" />
+          <s:enumeration value="Time" />
+          <s:enumeration value="DateTime2" />
+          <s:enumeration value="DateTimeOffset" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="DataHelperResponseObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ReturnMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResponseTable">
+            <s:complexType>
+              <s:sequence>
+                <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTableResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ServiceResponse" nillable="true" type="tns:DataHelperResponseObject" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecuredWebServiceHeader" type="tns:SecuredWebServiceHeader" />
+      <s:complexType name="SecuredWebServiceHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTableSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTable" />
+  </wsdl:message>
+  <wsdl:message name="GetTableSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTableSecuredWebServiceHeader">
+    <wsdl:part name="SecuredWebServiceHeader" element="tns:SecuredWebServiceHeader" />
+  </wsdl:message>
+  <wsdl:portType name="DataHelperSoap">
+    <wsdl:operation name="GetTable">
+      <wsdl:input message="tns:GetTableSoapIn" />
+      <wsdl:output message="tns:GetTableSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DataHelperSoap" type="tns:DataHelperSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetTable">
+      <soap:operation soapAction="http://tempuri.org/GetTable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetTableSecuredWebServiceHeader" part="SecuredWebServiceHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DataHelperSoap12" type="tns:DataHelperSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetTable">
+      <soap12:operation soapAction="http://tempuri.org/GetTable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetTableSecuredWebServiceHeader" part="SecuredWebServiceHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DataHelper">
+    <wsdl:port name="DataHelperSoap" binding="tns:DataHelperSoap">
+      <soap:address location="https://webservices.sacredheart.edu/DataHelper.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DataHelperSoap12" binding="tns:DataHelperSoap12">
+      <soap12:address location="https://webservices.sacredheart.edu/DataHelper.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
